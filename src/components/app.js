@@ -1,5 +1,6 @@
 import { h, Component } from 'preact'
 import { Router, route } from 'preact-router'
+import { Provider, connect } from 'preact-redux'
 
 import Header from './header'
 import Home from '../routes/home'
@@ -17,6 +18,7 @@ import NewTemplateRoute from '../routes/newTemplate'
 import ProfilesRoute from '../routes/profiles'
 
 import services from '../services'
+import store from '../state/store'
 
 // import Home from 'async!./home';
 // import Profile from 'async!./profile';
@@ -43,7 +45,7 @@ const fabChildren = [
   { name: 'Task', icon: <TaskIcon />, path: '/new/task' }
 ]
 
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -63,11 +65,14 @@ export default class App extends Component {
     return (
       <div id="app">
         <Header />
-        <Fab
-          open={open}
-          onClick={() => this.setState({ open: !open })}
-          items={fabChildren}
-        />
+        {props.profile_id && props.role === 'PARENT'
+          ? <Fab
+              open={open}
+              onClick={() => this.setState({ open: !open })}
+              items={fabChildren}
+            />
+          : null}
+
         <Router onChange={this.handleRoute}>
           <Home path="/" />
 
@@ -97,3 +102,8 @@ export default class App extends Component {
     )
   }
 }
+const AppWithData = connect(state => state)(App)
+export default () =>
+  <Provider store={store}>
+    <AppWithData />
+  </Provider>

@@ -1,21 +1,37 @@
 import { h, Component } from 'preact'
+import { connect } from 'preact-redux'
 import { Link } from 'preact-router/match'
 import styles from './styles.css'
 import services from '../../services'
 
-const User = ({ account, profile }) =>
-  <span>
-    <span>
-      {account.email}
-    </span>
-    <span>
-      {profile.name}
-    </span>
-  </span>
+const User = ({ name, email, profiles = [] }) =>
+  <div class={styles.dropdown}>
+    <div class={styles.dropdownHover}>
+      <span class={styles.name}>
+        {name}
+      </span>
+      <span class={styles.email}>
+        {email}
+      </span>
+    </div>
+    <div class={styles.dropdownList}>
+      {profiles.map(profile =>
+        <a
+          onClick={event => {
+            event.preventDefault()
+            services.changeProfile(profile)
+          }}
+          href={'#profile-' + profile.id}
+        >
+          {profile.name}
+        </a>
+      )}
+    </div>
+  </div>
 
-export default class Header extends Component {
-  render() {
-    console.log('render header')
+class Header extends Component {
+  render({ name, email, profiles }) {
+    console.log('render header ', this.props)
     return (
       <header class={styles.header}>
         <h1>GamifyWork</h1>
@@ -26,6 +42,7 @@ export default class Header extends Component {
           <Link activeClassName={styles.active} href="/tasks">
             Tasks
           </Link>
+          <User name={name} email={email} profiles={profiles} />
           {/* <Link activeClassName={styles.active} href="/profile/john">
             {services.isAuthenticated
               ? <User
@@ -39,3 +56,5 @@ export default class Header extends Component {
     )
   }
 }
+
+export default connect(state => state)(Header)

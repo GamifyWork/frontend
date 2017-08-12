@@ -1,3 +1,5 @@
+import store from '../state/store'
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -12,6 +14,27 @@ class Service {
     this._tasks
     this._templates
   }
+  set account(account) {
+    console.log('SET account')
+
+    this._account = account
+    store.dispatch({
+      type: 'CHANGE_ACCOUNT',
+      account_id: account.id,
+      email: account.email,
+      profiles: account.profiles
+    })
+  }
+  set profile(profile) {
+    this._profile = profile
+    store.dispatch({
+      type: 'CHANGE_PROFILE',
+      profile_id: profile.id,
+      name: profile.name,
+      role: profile.role
+    })
+  }
+
   get isAuthenticated() {
     return this._account ? true : false
   }
@@ -22,8 +45,34 @@ class Service {
     return this._profile
   }
   __fakeLogin__() {
-    this._account = { id: 1 }
-    this._profile = { id: 1 }
+    this.account = {
+      id: 1,
+      email: 'test@example.com',
+      profiles: [
+        {
+          id: 1,
+          name: 'Parent',
+          role: 'PARENT'
+        },
+        {
+          id: 2,
+          name: 'Child 1',
+          role: 'CHILD'
+        },
+        {
+          id: 3,
+          name: 'Child 2',
+          role: 'CHILD'
+        }
+      ]
+    }
+    // this._account = { id: 1 }
+    // this._profile = { id: 1 }
+    this.profile = {
+      id: 1,
+      name: 'Parent',
+      role: 'PARENT'
+    }
   }
 
   authenticate() {
@@ -40,7 +89,8 @@ class Service {
     })
   }
   changeProfile(profile) {
-    this._profile = profile
+    // this._profile = profile
+    this.profile = profile
   }
 
   getAccount(id) {
