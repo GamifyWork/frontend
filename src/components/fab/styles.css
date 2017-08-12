@@ -1,0 +1,74 @@
+.container {
+  /* background: grey; */
+  /* width: 80px; */
+  width: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  padding: 0 8px 8px 8px;
+}
+
+.button,
+.smallButton {
+  background: red;
+  border: none;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  /* transition: 0.4s background; */
+}
+.button svg path,
+.button svg circle,
+.smallButton svg path,
+.smallButton svg circle {
+  fill: white;
+}
+.button:hover,
+.smallButton:hover {
+  background: #d30000;
+}
+
+.button {
+  padding: 7px;
+  transition: background 0.4s;
+  box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.5);
+}
+.button svg {
+  width: 35px;
+  height: 35px;
+
+  transform-origin: center;
+  transition: 0.6s transform;
+}
+
+.items {
+  display: none;
+}
+
+.smallButton {
+  padding: 5px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+  margin: 2px;
+}
+.smallButton svg {
+  height: 30px;
+  width: 30px;
+}
+
+/* if open */
+.openContainer .button svg {
+  transform: rotate(45deg);
+}
+.openContainer .items {
+  display: inline-block;
+}

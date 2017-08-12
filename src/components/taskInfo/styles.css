@@ -1,0 +1,19 @@
+.task {
+}
+
+.header {
+  background: #e4e4e4;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+.title {
+  color: black;
+}
+.right {
+  margin-left: auto;
+}
+
+.description {
+  padding: 10px 20px;
+}

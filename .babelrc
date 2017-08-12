@@ -1,0 +1,8 @@
+{
+  "presets": ["es2015", "es2016", "react"],
+  "plugins": [
+    ["transform-react-jsx", { "pragma": "h" }],
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ]
+}
