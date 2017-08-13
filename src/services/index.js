@@ -15,8 +15,6 @@ class Service {
     this._templates
   }
   set account(account) {
-    console.log('SET account')
-
     this._account = account
     store.dispatch({
       type: 'CHANGE_ACCOUNT',
@@ -97,7 +95,7 @@ class Service {
     fetch(this._basebaseUrl + '/account/' + id)
       .then(res => res.json())
       .then(account => {
-        console.log(account)
+        // console.log(account)
       })
   }
   getTasks() {
@@ -105,11 +103,20 @@ class Service {
       if (this._tasks) {
         return resolve(this._tasks)
       }
+      store.dispatch({
+        type: 'START_LOADING_TASKS'
+      })
 
       return fetch(this._basebaseUrl + '/task')
         .then(res => res.json())
         .then(tasks => {
           this._tasks = tasks
+
+          store.dispatch({
+            type: 'FINISH_LOADING_TASKS',
+            tasks
+          })
+
           return resolve(tasks)
         })
         .catch(reject)
@@ -132,40 +139,44 @@ class Service {
     )
     this._tasks = null
 
-    const id = getRandomInt(0, 1000)
+    const createOneTask = profile_id => {
+      const id = getRandomInt(0, 1000)
 
-    const url = this._basebaseUrl + '/task/'
-    const body = JSON.stringify({
-      ...template,
+      const url = this._basebaseUrl + '/task/'
+      const body = JSON.stringify({
+        ...template,
 
-      // TODO: profile_id
+        // TODO: profile_id
+        profile_id,
 
-      id,
+        id,
 
-      task_id: id,
-      task_template_id: template_id,
+        task_id: id,
+        task_template_id: template_id,
 
-      // title: 'Task: ' + template_id,
-      // description: 'xxx',
-      // coins: 20,
-      finished: null,
-      verified: null
-    })
-
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log(res)
-        return res
+        // title: 'Task: ' + template_id,
+        // description: 'xxx',
+        // coins: 20,
+        finished: null,
+        verified: null
       })
-      .catch(console.error)
+
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body
+      })
+        .then(res => res.json())
+        .then(res => {
+          // console.log(res)
+          return res
+        })
+        .catch(console.error)
+    }
+    return Promise.all(children_ids.map(id => createOneTask(id)))
   }
   getTemplates() {
     const url = this._basebaseUrl + '/template'
@@ -205,7 +216,7 @@ class Service {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res)
+        // console.log(res)
         return res
       })
       .catch(console.error)
@@ -245,7 +256,7 @@ class Service {
       tasks[task.profile_id].push(task)
     })
 
-    console.log(tasks)
+    // console.log(tasks)
     return tasks
   }
 }

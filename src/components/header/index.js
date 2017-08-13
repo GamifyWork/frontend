@@ -31,7 +31,6 @@ const User = ({ name, email, profiles = [] }) =>
 
 class Header extends Component {
   render({ name, email, profiles }) {
-    console.log('render header ', this.props)
     return (
       <header class={styles.header}>
         <h1>GamifyWork</h1>

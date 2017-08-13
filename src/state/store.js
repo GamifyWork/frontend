@@ -16,7 +16,29 @@ let ACTIONS = {
     name: action.name,
     role: action.role,
     ...state
-  })
+  }),
+  START_LOADING_TASKS: (state, action) => ({
+    ...state,
+    tasks_loading: true
+  }),
+  FINISH_LOADING_TASKS: (state, action) => {
+    const tasks = action.tasks
+
+    const profile_tasks = {}
+    tasks.forEach(task => {
+      if (!profile_tasks[task.profile_id]) profile_tasks[task.profile_id] = []
+
+      profile_tasks[task.profile_id].push(task)
+    })
+
+    return {
+      ...state,
+      tasks_loading: false,
+      tasks_error: null,
+      tasks,
+      tasks_per_profile: profile_tasks
+    }
+  }
 
   // ADD_TODO: ({ todos, ...state }, { text }) => ({
   // 	todos: [...todos, {
@@ -40,7 +62,12 @@ const INITIAL = {
   name: null,
   role: null,
 
-  profiles: []
+  profiles: [],
+
+  tasks_loading: null,
+  tasks_error: null,
+  tasks: [],
+  tasks_per_profile: []
 }
 
 export default createStore(

@@ -1,10 +1,11 @@
 import { h, Component } from 'preact'
 // import styles from './styles';
+import { connect } from 'preact-redux'
 import { route } from 'preact-router'
 import NewTask from '../../components/newTask'
 import services from '../../services'
 
-export default class NewTaskRoute extends Component {
+class NewTaskRoute extends Component {
   constructor(props) {
     super(props)
 
@@ -65,13 +66,13 @@ export default class NewTaskRoute extends Component {
     //   { title: 'Zimmer aufräumen', id: 1 },
     //   { title: 'Spülmaschine ausräumen', id: 2 }
     // ]
-    const children = [{ name: 'Child 1', id: 1 }, { name: 'Child 2', id: 2 }]
+    // const children = [{ name: 'Child 1', id: 1 }, { name: 'Child 2', id: 2 }]
 
     return (
       <div style={{ padding: '60px 20px' }}>
         <NewTask
           templates={templates}
-          children={children.map(child => {
+          children={props.children.map(child => {
             return {
               ...child,
               checked: children_state[child.id]
@@ -85,3 +86,6 @@ export default class NewTaskRoute extends Component {
     )
   }
 }
+export default connect(state => ({
+  children: state.profiles.filter(profile => profile.role !== 'PARENT')
+}))(NewTaskRoute)
